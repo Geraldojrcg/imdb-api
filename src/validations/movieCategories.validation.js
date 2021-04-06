@@ -20,12 +20,6 @@ const get = {
 const create = {
   body: yup.object().shape({
     name: yup.string().required(),
-    description: yup.string().required(),
-    language: yup.string().required(),
-    duration: yup.number().positive().required(),
-    releaseDate: yup.date().required(),
-    categoryId: yup.number().positive().required(),
-    directorId: yup.number().positive().required(),
   }),
 };
 
@@ -35,12 +29,6 @@ const update = {
   }),
   body: yup.object().shape({
     name: yup.string(),
-    description: yup.string(),
-    language: yup.string(),
-    duration: yup.number().positive(),
-    releaseDate: yup.date(),
-    categoryId: yup.number().positive(),
-    directorId: yup.number().positive(),
   }),
 };
 
@@ -50,20 +38,10 @@ const destroy = {
   }),
 };
 
-const rate = {
-  params: yup.object().shape({
-    id: yup.number().integer(),
-  }),
-  body: yup.object().shape({
-    rating: yup.number().integer().min(1).max(4).required(),
-  }),
-};
-
-module.exports.movies = {
+module.exports.movieCategories = {
   list,
   get,
   create,
   update,
   destroy,
-  rate,
 };

@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: 'last_name',
       },
+      ssn: DataTypes.INTEGER,
       function: DataTypes.ENUM(['director', 'actor']),
       createdAt: {
         type: DataTypes.DATE,
@@ -22,10 +23,16 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  Employee.associate = function (models) {
-    Employee.hasMany(models.Movie);
+  Employee.associate = function associate(models) {
+    models.Employee.hasMany(models.Movie, {
+      foreignKey: 'directorId',
+    });
 
-    Employee.belongsToMany(models.Movie, { through: 'MovieEmployees' });
+    models.Employee.belongsToMany(models.Movie, {
+      through: 'MovieEmployees',
+      foreignKey: 'employeeId',
+      as: 'movies',
+    });
   };
 
   return Employee;

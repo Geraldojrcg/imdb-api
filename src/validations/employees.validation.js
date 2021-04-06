@@ -20,12 +20,12 @@ const get = {
 const create = {
   body: yup.object().shape({
     name: yup.string().required(),
-    description: yup.string().required(),
-    language: yup.string().required(),
-    duration: yup.number().positive().required(),
-    releaseDate: yup.date().required(),
-    categoryId: yup.number().positive().required(),
-    directorId: yup.number().positive().required(),
+    lastName: yup.string().required(),
+    ssn: yup
+      .string()
+      .min(9, 'Social Security Number must be up to 9 digits without dashes')
+      .required('Social Security Number is Required'),
+    function: yup.mixed().oneOf(['director', 'actor']).required(),
   }),
 };
 
@@ -35,12 +35,9 @@ const update = {
   }),
   body: yup.object().shape({
     name: yup.string(),
-    description: yup.string(),
-    language: yup.string(),
-    duration: yup.number().positive(),
-    releaseDate: yup.date(),
-    categoryId: yup.number().positive(),
-    directorId: yup.number().positive(),
+    lastName: yup.string(),
+    ssn: yup.string().min(9, 'Social Security Number must be up to 9 digits without dashes'),
+    function: yup.mixed().oneOf(['director', 'actor']),
   }),
 };
 
@@ -50,20 +47,10 @@ const destroy = {
   }),
 };
 
-const rate = {
-  params: yup.object().shape({
-    id: yup.number().integer(),
-  }),
-  body: yup.object().shape({
-    rating: yup.number().integer().min(1).max(4).required(),
-  }),
-};
-
-module.exports.movies = {
+module.exports.employees = {
   list,
   get,
   create,
   update,
   destroy,
-  rate,
 };

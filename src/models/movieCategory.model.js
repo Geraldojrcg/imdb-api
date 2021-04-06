@@ -17,8 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  MovieCategory.associate = function (models) {
-    MovieCategory.hasMany(models.Movie);
+  MovieCategory.associate = function associate(models) {
+    models.MovieCategory.hasMany(models.Movie, {
+      foreignKey: 'categoryId',
+      as: 'movies',
+    });
   };
 
   return MovieCategory;

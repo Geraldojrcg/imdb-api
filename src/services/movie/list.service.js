@@ -1,11 +1,37 @@
 const { movieRepository } = require('../../repositories');
 const { queryHelper } = require('../../helpers');
+const { MovieRating } = require('../../models');
+const { User } = require('../../models');
 
 module.exports.list = async (options) => {
-  const query = queryHelper(options);
+  let query = queryHelper(options);
+
+  query = {
+    ...query,
+    include: [
+      {
+        model: MovieRating,
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['name', 'email'],
+          },
+        ],
+        as: 'ratings',
+        attributes: ['rating'],
+        duplicating: false,
+      },
+    ],
+  };
 
   const { count, rows } = await movieRepository.list(query);
   const totalPages = Math.ceil(count / options.perPage);
+
+  rows.forEach((movie) => {
+    movie.dataValues.meanRating =
+      movie.ratings.reduce((total, r) => (total += r.rating), 0) / movie.ratings.length || 0;
+  });
 
   return {
     metadata: {

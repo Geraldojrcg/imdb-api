@@ -26,8 +26,15 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  User.associate = function (models) {
-    User.belongsToMany(models.Movie, { through: 'MovieRating' });
+  User.associate = function associate(models) {
+    models.User.belongsToMany(models.Movie, {
+      through: 'MovieRating',
+      foreignKey: 'userId',
+    });
+
+    models.User.hasMany(models.MovieRating, {
+      foreignKey: 'userId',
+    });
   };
 
   User.beforeSave(async (user, options) => {

@@ -36,17 +36,31 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  Movie.associate = function (models) {
-    Movie.belongsToMany(models.User, { through: 'MovieRating' });
-
-    Movie.belongsToMany(models.Employee, { through: 'MovieEmployees' });
-
-    Movie.belongsTo(models.MovieCategory, {
-      foreignKey: 'categoryId',
+  Movie.associate = function associate(models) {
+    models.Movie.belongsToMany(models.User, {
+      through: 'MovieRating',
+      foreignKey: 'movieId',
     });
 
-    Movie.belongsTo(models.Employee, {
+    models.Movie.hasMany(models.MovieRating, {
+      foreignKey: 'movieId',
+      as: 'ratings',
+    });
+
+    models.Movie.belongsToMany(models.Employee, {
+      through: 'MovieEmployees',
+      foreignKey: 'movieId',
+      as: 'actors',
+    });
+
+    models.Movie.belongsTo(models.MovieCategory, {
+      foreignKey: 'categoryId',
+      as: 'category',
+    });
+
+    models.Movie.belongsTo(models.Employee, {
       foreignKey: 'directorId',
+      as: 'director',
     });
   };
 

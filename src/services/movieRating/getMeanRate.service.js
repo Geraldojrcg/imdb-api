@@ -2,20 +2,20 @@ const { StatusCodes } = require('http-status-codes');
 const { ApplicationError } = require('../../utils');
 const { messages } = require('../../helpers');
 const { movieRepository } = require('../../repositories');
-const { usersRepository } = require('../../repositories');
 const { movieRatingRepository } = require('../../repositories');
+const Sequelize = require('../../models');
 
-module.exports.rate = async (params) => {
-  const { movieId, userId } = params;
+module.exports.getMeanRate = async (movieId) => {
   const movie = await movieRepository.getById(movieId);
   if (!movie) {
     throw new ApplicationError(messages.notFound('movie'), StatusCodes.NOT_FOUND);
   }
 
-  const user = await usersRepository.getById(userId);
-  if (!user) {
-    throw new ApplicationError(messages.notFound('user'), StatusCodes.NOT_FOUND);
-  }
-
-  return movieRatingRepository.create(params);
+  return movieRatingRepository.find({
+    where: {
+      movieId,
+    },
+    group: ['movie.id'],
+    attributes: [[Sequelize.fn('mean', Sequelize.col('rating')), 'meanRating']],
+  });
 };

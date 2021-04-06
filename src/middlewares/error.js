@@ -9,6 +9,7 @@ const errorTracker = (err, req, res, next) => {
     const message = error.message || messages.internalError;
     error = new ApplicationError(message, status, false, err.stack);
   }
+  console.log(err);
   next(error);
 };
 
