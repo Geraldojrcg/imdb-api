@@ -5,8 +5,7 @@ const { movieRatingService } = require('../services');
 
 module.exports = {
   list: catchAsync(async (req, res) => {
-    const { page, perPage, sortBy } = req.query;
-    const response = await movieService.list({ page, perPage, sortBy });
+    const response = await movieService.list(req.query);
 
     if (!response || response.data.length === 0) {
       return res.status(StatusCodes.NO_CONTENT).end();

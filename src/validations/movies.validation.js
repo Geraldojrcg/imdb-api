@@ -2,6 +2,10 @@ const yup = require('yup');
 
 const list = {
   query: yup.object().shape({
+    name: yup.string(),
+    director: yup.string(),
+    category: yup.string(),
+    actors: yup.string(),
     page: yup.number().integer().default(1),
     perPage: yup.number().integer().default(10),
     sortBy: yup
@@ -26,6 +30,7 @@ const create = {
     releaseDate: yup.date().required(),
     categoryId: yup.number().positive().required(),
     directorId: yup.number().positive().required(),
+    actors: yup.array().of(yup.string()),
   }),
 };
 

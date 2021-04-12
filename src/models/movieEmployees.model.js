@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       movieId: {
         type: DataTypes.INTEGER,
-        ield: 'movie_id',
+        field: 'movie_id',
         references: {
           model: 'Movie',
           key: 'id',
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       employeeId: {
         type: DataTypes.INTEGER,
-        ield: 'employee_id',
+        field: 'employee_id',
         references: {
           model: 'Employee',
           key: 'id',
@@ -31,5 +31,18 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'movie_employees',
     },
   );
+
+  MovieEmployees.associate = function associate(models) {
+    models.MovieEmployees.belongsTo(models.Movie, {
+      foreignKey: 'movieId',
+      as: 'movie',
+    });
+
+    models.MovieEmployees.belongsTo(models.Employee, {
+      foreignKey: 'employeeId',
+      as: 'actor',
+    });
+  };
+
   return MovieEmployees;
 };
